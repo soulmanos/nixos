@@ -16,7 +16,14 @@ mkfs.ext4 -L nixos /dev/sda1
 mkswap -L swap /dev/sda2
 mount /dev/disk/by-label/nixos /mnt
 nixos-generate-config --root /mnt
+# Think it might make sense to add more in here before bootstrapping flakes e.g. a user other than root, enable ssh etc
 sed -i 's/# boot.loader.grub.device/boot.loader.grub.device/g' /mnt/etc/nixos/configuration.nix
+sed -i 's/# networking.networkmanager.enable/networking.networkmanager.enable/g' /mnt/etc/nixos/configuration.nix
+sed -i 's/# time.timeZone/time.timeZone/g' /mnt/etc/nixos/configuration.nix
+sed -i 's/Amsterdam/London/g' /mnt/etc/nixos/configuration.nix
+sed -i 's/# services.openssh.enable/services.openssh.enable/g' /mnt/etc/nixos/configuration.nix
+sed -i '94i\   services.openssh.settings.PermitRootLogin = \"yes\";' /mnt/etc/nixos/configuration.nix
+sed -i '98i\   networking.firewall.allowedTCPPorts = [ 22 ];' /mnt/etc/nixos/configuration.nix
 nixos-install
 reboot
 ```
