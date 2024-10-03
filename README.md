@@ -28,13 +28,24 @@ nixos-install
 reboot
 ```
 
+- Enable experimental features so we can use flakes
+  
 ```
+cd ~
 mkdir -p ./.config/nix/
 cat << EOM >> ./.config/nix/nix.conf
 experimental-features = nix-command flakes
 EOM
-nixos-rebuild switch
+sudo nixos-rebuild switch
+nix show-config | grep experimental-features # check experimental features is enabled
 nix-shell -p vim
+```
+
+- install `jq` from a flake
+
+```
+nix profile install github:NixOS/nixpkgs#jq
+nix profile list
 ```
 
 ## Existing `/etc/nixos/configuration.nix`
